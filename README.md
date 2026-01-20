@@ -1,9 +1,6 @@
-# 🔐 Terraform AWS Infrastructure with S3 Backend & DynamoDB State Locking
+# Terraform AWS Infrastructure with S3 Backend & DynamoDB State Locking
 
-![Terraform](https://img.shields.io/badge/Terraform-v1.0+-623CE4?logo=terraform&logoColor=white)
-![AWS](https://img.shields.io/badge/AWS-Cloud-FF9900?logo=amazon-aws&logoColor=white)
-
-## 📌 Project Purpose
+## Project Purpose
 ---
 The purpose of this project is to implement **Terraform remote state management using AWS S3 and DynamoDB** so that:
 
@@ -13,12 +10,12 @@ The purpose of this project is to implement **Terraform remote state management 
 - Real-world issues like **state lock errors, duplicate resources, and backend reconfiguration** are understood and resolved
 - AWS infrastructure (**EC2, Security Group, Key Pair, VPC**) is managed using **Infrastructure as Code (IaC)** following production best practices
 
-👉 **In short:**  
+ **In short:**  
 This project simulates how Terraform is used by real DevOps teams with a **remote backend and state locking on AWS**.
 
 ---
 
-## 📌 Project Overview
+##  Project Overview
 ---
 This project demonstrates a **production-grade Terraform setup** implementing:
 
@@ -29,15 +26,15 @@ This project demonstrates a **production-grade Terraform setup** implementing:
 This is a **real-world DevOps implementation** that shows how enterprise teams manage Terraform state safely across **multiple engineers** without conflicts or state corruption.
 
 
-## 🎯 Problem Statement
+##  Problem Statement
 
 In collaborative DevOps environments, multiple engineers often work on the same infrastructure code. Without proper state management:
 
-- ❌ Concurrent `terraform apply` runs can **corrupt the state file**
-- ❌ Infrastructure changes become **unpredictable and inconsistent**
-- ❌ Team collaboration becomes **difficult and error-prone**
+-  Concurrent `terraform apply` runs can **corrupt the state file**
+-  Infrastructure changes become **unpredictable and inconsistent**
+-  Team collaboration becomes **difficult and error-prone**
 
-### ✅ Solution
+###  Solution
 
 This project implements **distributed state locking** using DynamoDB, ensuring:
 - Only one user can modify infrastructure at a time
@@ -47,7 +44,7 @@ This project implements **distributed state locking** using DynamoDB, ensuring:
 
 ---
 
-## 🏗️ Architecture
+##  Architecture
 ```
 ┌─────────────┐
 │   Dev Team  │
@@ -73,7 +70,7 @@ This project implements **distributed state locking** using DynamoDB, ensuring:
 
 ---
 
-## 📂 Project Structure
+##  Project Structure
 ```
 HW_Terra_Practice/
 │
@@ -91,7 +88,7 @@ HW_Terra_Practice/
 
 ```
 
-## 🛠️ Technologies Used
+##  Technologies Used
 
 - **Terraform** - Infrastructure as Code
 - **AWS EC2** - Compute instances
@@ -101,7 +98,7 @@ HW_Terra_Practice/
 - **Git** - Version control
 ---
 
-## 🔐 Backend Configuration
+##  Backend Configuration
 
 HW_Terra_Practice/
 ├── terraform.tf
@@ -117,7 +114,7 @@ terraform {
 }
 ```
 
-### 🔒 How State Locking Works
+###  How State Locking Works
 
 1. **User-1** runs `terraform apply`
    - DynamoDB creates a lock entry
@@ -133,21 +130,21 @@ terraform {
 
 ---
 
-## 👥 Practical Lock Conflict Scenario
+##  Practical Lock Conflict Scenario
 
 ### Scenario: Two Engineers Working Simultaneously
 ```bash
 # User-1 (Terminal 1)
 $ terraform apply
 Acquiring state lock. This may take a few moments...
-✅ Lock acquired successfully
+ Lock acquired successfully
 Apply complete! Resources: 3 added, 0 changed, 0 destroyed.
 ```
 ```bash
 # User-2 (Terminal 2 - at the same time)
 $ terraform apply
 Acquiring state lock. This may take a few moments...
-❌ Error: Error acquiring the state lock
+ Error: Error acquiring the state lock
 
 Error message:
   ConditionalCheckFailedException: The conditional request failed
@@ -159,16 +156,16 @@ Error message:
     Created:   2026-01-16 10:30:45.123456 +0000 UTC
 ```
 
-### ✅ Correct Solution
+###  Correct Solution
 
 **User-2 should:**
 1. Wait for User-1 to complete their operation
 2. Lock will be **automatically released**
 3. Retry `terraform apply`
 
-### ❌ Wrong Solution (Dangerous!)
+###  Wrong Solution (Dangerous!)
 ```bash
-# ⚠️ DO NOT DO THIS unless absolutely necessary
+#   DO NOT DO THIS unless absolutely necessary
 terraform apply -lock=false
 ```
 
@@ -180,7 +177,7 @@ terraform apply -lock=false
 
 ---
 
-## 🚨 Emergency: Stuck Lock Resolution
+##  Emergency: Stuck Lock Resolution
 
 If Terraform crashed and the lock wasn't released:
 ```bash
@@ -192,15 +189,15 @@ terraform force-unlock <LOCK_ID>
 ```
 
 **When to use:**
-- ✅ Terraform process crashed unexpectedly
-- ✅ Confirmed no one else is running operations
-- ❌ Just because you're impatient
+-  Terraform process crashed unexpectedly
+-  Confirmed no one else is running operations
+-  Just because you're impatient
 
 ---
 
-## 🧪 Common Errors & Solutions
+##  Common Errors & Solutions
 
-### 1️⃣ Error: Backend configuration changed
+### 1️ Error: Backend configuration changed
 ```bash
 Error: Backend configuration changed
 ```
@@ -210,7 +207,7 @@ Error: Backend configuration changed
 terraform init -reconfigure
 ```
 
-### 2️⃣ Error: S3 bucket does not exist
+### 2️ Error: S3 bucket does not exist
 ```bash
 Error: Failed to get existing workspaces: S3 bucket does not exist
 ```
@@ -219,7 +216,7 @@ Error: Failed to get existing workspaces: S3 bucket does not exist
 - Create S3 bucket manually first
 - Or use a separate Terraform config to create backend resources
 
-### 3️⃣ Error: DynamoDB table does not exist
+### 3️ Error: DynamoDB table does not exist
 ```bash
 Error: Error acquiring the state lock: ResourceNotFoundException
 ```
@@ -229,7 +226,7 @@ Error: Error acquiring the state lock: ResourceNotFoundException
   - Primary key: `LockID` (String)
   - Billing mode: PAY_PER_REQUEST (recommended)
 
-### 4️⃣ Error: Access Denied
+### 4️ Error: Access Denied
 ```bash
 Error: error configuring S3 Backend: AccessDenied
 ```
@@ -240,7 +237,7 @@ Error: error configuring S3 Backend: AccessDenied
 
 ---
 
-## 🚀 Getting Started
+##  Getting Started
 
 ### Prerequisites
 
@@ -273,18 +270,18 @@ terraform destroy
 
 ---
 
-## 📋 Best Practices Implemented
+##  Best Practices Implemented
 
-- ✅ **Remote State Storage** - S3 for centralized state management
-- ✅ **State Locking** - DynamoDB prevents concurrent modifications
-- ✅ **Version Control** - `.gitignore` excludes sensitive files
-- ✅ **Modular Code** - Separate files for different resources
-- ✅ **Documentation** - Comprehensive README and inline comments
-- ✅ **Error Handling** - Common issues documented with solutions
+-  **Remote State Storage** - S3 for centralized state management
+-  **State Locking** - DynamoDB prevents concurrent modifications
+-  **Version Control** - `.gitignore` excludes sensitive files
+-  **Modular Code** - Separate files for different resources
+-  **Documentation** - Comprehensive README and inline comments
+-  **Error Handling** - Common issues documented with solutions
 
 ---
 
-## 🧠 Key Learnings
+##  Key Learnings
 
 - Remote backends are **mandatory** for team environments
 - DynamoDB state locking prevents **concurrent execution conflicts**
@@ -294,18 +291,18 @@ terraform destroy
 
 ---
 
-## 🌐 Real-World Use Cases
+##  Real-World Use Cases
 
 This pattern is used in:
 
-- ✅ **Enterprise DevOps Teams** - Multiple engineers collaborating
-- ✅ **CI/CD Pipelines** - Jenkins, GitLab CI, GitHub Actions
-- ✅ **Multi-Environment Deployments** - Dev, Staging, Production
-- ✅ **Infrastructure Compliance** - change tracking
+-  **Enterprise DevOps Teams** - Multiple engineers collaborating
+-  **CI/CD Pipelines** - Jenkins, GitLab CI, GitHub Actions
+-  **Multi-Environment Deployments** - Dev, Staging, Production
+-  **Infrastructure Compliance** - change tracking
 
 ---
 
-## 📚 Additional Resources
+##  Additional Resources
 
 - [Terraform Backend Configuration](https://www.terraform.io/docs/language/settings/backends/s3.html)
 - [DynamoDB State Locking](https://www.terraform.io/docs/language/settings/backends/s3.html#dynamodb-state-locking)
@@ -313,7 +310,7 @@ This pattern is used in:
 
 ---
 
-## 🤝 Contributing
+##  Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
 
@@ -327,21 +324,21 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 ---
 
-## 👤 Author
+##  Author
 
 **Samarth**
 
-- 🔧 DevOps Engineer
-- ☁️ AWS Engineer
+-  DevOps Engineer
+-  AWS Engineer
 ---
 
-## ⭐ Show Your Support
+##  Show Your Support
 
 Give a ⭐️ if this project helped you understand Terraform state management!
 
 ---
 
-## 📞 Contact
+##  Contact
 
 For questions or suggestions, feel free to reach out or open an issue!
 mail id: samarthf28@gmail.com
